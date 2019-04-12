@@ -4,7 +4,7 @@
 ### What is COMPAS?
 > COMPAS (Correctional Offender Management Profiling for Alternative Sanctions) is a popular commercial algorithm used by judges and parole officers for scoring criminal defendant’s likelihood of reoffending (recidivism).
 
-> [COMPAS Technical Document](http://www.northpointeinc.com/files/technical_documents/FieldGuide2_081412.pdf) Chapter three: campas validity and reliability especially worth attention. 
+> [COMPAS Technical Document](http://www.northpointeinc.com/files/technical_documents/FieldGuide2_081412.pdf) Chapter three: campas validity and reliability is especially worthing attention. 
 
 ### What is ProPublica's story "Machine Bias"?
 > ProPublica analyzed COMPAS Recidivism Algorithm and found that black defendants were far more likely white defendants to be incorrectly judged to be at a higher risk of recidivism. 
