@@ -11,4 +11,5 @@
 
 ### What do we want to do?
 > Prior researches questioning fairness of COMPAS focus on racial factor, we want to investigate into how other factors, such as age, marial status, gender, crime history, etc, may result in biased COMPOS score.
+
 > Potential feature list: gender, age at sentence, race, employment status, education, marial status, illicit drug use, sentence type (probation, alternatives, prison) 
