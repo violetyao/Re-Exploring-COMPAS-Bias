@@ -35,10 +35,7 @@ We select the category “Caucasian” as the baseline. It has a false positive 
 
 ![Race](https://github.com/violetyao/Exploring-COMPAS-Bias/blob/master/images/race.png)
 
-<p align="center">
-  <Figure 1: False Positive Rates for Different Groups>
-</p>
-
+Figure 1: False Positive Rates for Different Groups
 
 ### 3 Dataset Visualization
 
