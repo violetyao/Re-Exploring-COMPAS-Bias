@@ -37,7 +37,7 @@ We select the category “Caucasian” as the baseline. It has a false positive 
 
 Figure 1: False Positive Rates for Different Groups
 
-### 3. Dataset Visualization
+### 3 Dataset Visualization
 
 It is worth noticing that not all Broward County residents have COMPAS score. Only those who were arrested would be assigned COMPAS scores. We are interested in how it compares to demographics in Broward County in general. We visit American FactFinder [1] for surveys about Broward County demographics. We find a significant mismatch between those who were arrested and received a COMPAS score and the general Broward de- mographics. At this stage, we were thinking that other demographic factors, such as age and gender, might also result in biased COMPAS scores.
 
@@ -58,7 +58,7 @@ While African American are 21% of Broward Population, it makes up over 50% of Pr
 
 ![Figure 4: Comparison of Distributions of Races](https://github.com/violetyao/Exploring-COMPAS-Bias/blob/master/images/dist_race.png)
 
-### 4. Analysis of Explanatory Power
+### 4 Analysis of Explanatory Power
 
 In order to show the extent to which COMPAS scores are associated with demographic characteristics, we first establish a baseline: to what extent recidivism is associated with demographic characteristics. To do so, we run a linear regression in which demographic characteristics are indepen- dent variables and two-year recidivism dependent variable. The formula is yrecid = β1Xsex +β2Xage +β3Xrace +ε, where Xsex, Xage, and Xrace are one-hot encodings. We fit the model on the Broward County dataset, and found a R2 score of 0.374 (Figure 5, red line). This implies that without any predictive model, recidivism to a moderate extent can be explained by demographic characteristics. This effect can be attributed to unbalanced dataset as well as various degree of propensity to recidivate due to difference in different groups of people, though the reason behind it is out of the scope of this project. For example, higher level of testosterone in men may be associated with more aggression; underdeveloped prefrontal cortexes in people age less than 25 may be associated with more impulsive behaviors.
 
@@ -74,7 +74,7 @@ For example, if “fewer years of education” lead to a higher COMPAS score, pe
 
 We repeat the process for each of the three demographic characteristics independently and observe similar trends. (Figure 6)
 
-### 5. Analysis of Variability
+### 5 Analysis of Variability
 
 To find out the reason behind the positive correlation between R2 scores and COMPAS scores, we become interested in the algorithm’s performance across its scores. To do so, we formulate COMPAS scores as probability to recidivate. A score of 1 represents 10% probability of recidivism, and a score of 10 dictates with certainty that the individual will recidivate in two years. Note that under our formulation, a score of 5 predicts with equal probability that the individual recidivates or not.
 
@@ -140,17 +140,20 @@ Although more complicated and non-parametric models may relieve the need for hol
 
 ### 9 Future Work
 
-
 At present, we, as well as other researchers, are only able to study the result of COMPAS algorithm, instead of studying the algorithm itself. What’s more, data sources are extremely limited. We only have COMPAS scores for Broward County 2013 - 2014 collected by ProPublica. We tried to look for more data to confirm our conclusion, but there are no other data sources in public domain. It is difficult to request data from COMPAS directly since it is a for-profit company and considers its algorithm proprietary. However, requesting data from the government should be viable. We sincerely hope that researchers, who are passionate about this topic and have access to the government database, could test our conclusion against more data.
-
 
 We believe that COMPAS’s data and algorithm should be accessible to the general public, just as the laws of a nation are publicly accessible and clearly articulated. A New York Times story [3] reported in 2017 that Mr. Loomis, who was sent to prison partly because of his COMPAS score, appealed that his right to due process was violated. Mr. Loomis’s argument is strong. Although based on our research we concluded that COMPAS is notbiased against any demographic group, we cannot argue against Mr. Loomis that his sentence was fair. After all, we did not know anything more about COMPAS algorithm than Mr. Loomis.
 
 We call for more government regulation and public discussion over Com- putational law. COMPAS scores are used in sentencing and thus can be con- sidered as part of law. Law should be a consensus of citizens, right? What’s more, shouldn’t law be made by legislature? Is it ethical for a company to ”commercialize” law?
 
 References
+
 [1] United States Census Bureau. American FactFinder.
+
 [2] Angwin et al. Machine Bias. 2016.
+
 [3] Adam Liptak. Sent to prison by a software program’s secret algorithms. 2017.
+
 [4] ProPublica. Data and analysis for ’Machine Bias’, 2017.
+
 [5] Pedro Saleiro, Benedict Kuester, Abby Stevens, Ari Anisfeld, Loren Hink- son, Jesse London, and Rayid Ghani. Aequitas: A bias and fairness audit toolkit. arXiv preprint arXiv:1811.05577, 2018.
