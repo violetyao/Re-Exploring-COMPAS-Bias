@@ -1,7 +1,7 @@
 ### Re-Exploring COMPAS Bias
 > A LEGALST123 2019 Spring Project by Zekai Fan and Violet Yao
 
-### 1. Introduction
+### 1 Introduction
 
 In the beginning of the semester, we read an article by ProPublica about the recidivism-predicting algorithm COMPAS, or Correctional Offender Manage- ment Profiling for Alternative Sanctions, developed by the private company Northpointe, known now as Equivant. The article entitled “Machine Bias” [2] claims that COMPAS scoring algorithm is biased against African Americans, as it is particularly likely to falsely flag black defendants as future criminals, almost at twice the rate as white defendants. For example, arrested both for drug possession, Fudget, a white defendant, receives a score of 3, which belongs to low-risk category; while Parker, a black defendant, receives a score of 10, which belongs to high-risk category.
 
@@ -13,7 +13,7 @@ At first, we want to dive into the criteria used by the algorithm to make a deci
 
 Then, where can we get COMPAS scores? Again, Northpointe does not disclose any data, including COMPAS scores and recipient profiles. But we gain access to COMPAS scores for Broward County in Florida from 2013 to 2014. This dataset [4] is made accessible by ProPublica, who made an open-record request to Broward County.
 
-### 2. Exploratory Analysis
+### 2 Exploratory Analysis
 
 In class, we learned to use the bias and fairness audit toolkit “Aequitas” [5], developed by the Center for Data Science and Public Policy at the University of Chicago. The developers of Aequitas used the same Broward County dataset used by ProPublica as a demonstration for the usage of their software. Aequitas is able to display various rate disparities for different groups in a dataset. According to the decision tree proposed by its developers, we should select “false positive rate” if we are interested in “fairness in errors” for “punitive interventions” that affect more than “a small percentage of population”. We concur with this result, as we believe if false positivity is inevitable, every group of people should be equally susceptible to it. The acceptable 80% to 125% interval is marked by the red lines (Figure 1). It should be noted that some experts have a different opinion. The developers of COMPAS selected false discovery rate as a benchmark to calibrate their algorithm on. We reproduced the analysis of false positive rate on the original Broward County dataset, using Aequitas.
 
@@ -29,24 +29,40 @@ We select the category “Greater than 45” as the baseline. It has a false pos
 
 We select the category “Caucasian” as the baseline. It has a false positive rate of 6.7%. “African-American” has a 22.3% false positive rate, far higher than 125% of that of “Caucasian”. “Asian” has a false positive rate of 4.5%, lower than 80% of that of “Caucasian”. “Native American” has a false positive rate of 8.3%, far higher than 125% of that of “Caucasian.” “Hispanic” is the only group that falls in the range of 80% - 125% of baseline determined by “Caucasian”. For yet another time, all groups fail the audit. (Figure 1c)
 
-### 3. Dataset Visualization
+![Sex](https://github.com/violetyao/Exploring-COMPAS-Bias/blob/master/images/sex.png)
 
+![Age](https://github.com/violetyao/Exploring-COMPAS-Bias/blob/master/images/age.png)
+
+![Race](https://github.com/violetyao/Exploring-COMPAS-Bias/blob/master/images/race.png)
+
+Figure 1: False Positive Rates for Different Groups
+
+### 3. Dataset Visualization
 
 It is worth noticing that not all Broward County residents have COMPAS score. Only those who were arrested would be assigned COMPAS scores. We are interested in how it compares to demographics in Broward County in general. We visit American FactFinder [1] for surveys about Broward County demographics. We find a significant mismatch between those who were arrested and received a COMPAS score and the general Broward de- mographics. At this stage, we were thinking that other demographic factors, such as age and gender, might also result in biased COMPAS scores.
 
 #### 3.1 Sex
 While female-male ratio is roughly 1 to 1 in Broward demographics, the males make up three fourths in ProPublica’s dataset. (Figure 2)
 
+![Figure 2: Comparison of Distributions of Sexes](https://github.com/violetyao/Exploring-COMPAS-Bias/blob/master/images/dist_sex.png)
+
 #### 3.2 Age
 While people aged 25 - 45 is a smaller portion in Broward Demographics, it makes up a much larger portion in ProPublica’s dataset. Percentage of both
 
+![Figure 3: Comparison of Distributions of Age](https://github.com/violetyao/Exploring-COMPAS-Bias/blob/master/images/dist_age_cat.png) 
+
 #### 3.3 Race
 The Broward County dataset considers ”Hispanic” as a race. U.S. Census on the other hand considers ”Hispanic” as a characteristic that people possess in addition to their races. In order to make them comparable, we transform the data from U.S. Census so that they align with those on the Broward County dataset. In this process, we assume that people belonging to only one race are equally likely to be Hispanic. We categorize people who belong to two or more races as ”Other”.
+
 While African American are 21% of Broward Population, it makes up over 50% of ProPublica’s dataset. In contrast, compared to their demo- graphic representation, Caucasian, Hispanic and Asian have a lower percent- age in ProPublica’s dataset. (Figure 4)
+
+![Figure 4: Comparison of Distributions of Races](https://github.com/violetyao/Exploring-COMPAS-Bias/blob/master/images/dist_race.png)
 
 ### 4. Analysis of Explanatory Power
 
 In order to show the extent to which COMPAS scores are associated with demographic characteristics, we first establish a baseline: to what extent recidivism is associated with demographic characteristics. To do so, we run a linear regression in which demographic characteristics are indepen- dent variables and two-year recidivism dependent variable. The formula is yrecid = β1Xsex +β2Xage +β3Xrace +ε, where Xsex, Xage, and Xrace are one-hot encodings. We fit the model on the Broward County dataset, and found a R2 score of 0.374 (Figure 5, red line). This implies that without any predictive model, recidivism to a moderate extent can be explained by demographic characteristics. This effect can be attributed to unbalanced dataset as well as various degree of propensity to recidivate due to difference in different groups of people, though the reason behind it is out of the scope of this project. For example, higher level of testosterone in men may be associated with more aggression; underdeveloped prefrontal cortexes in people age less than 25 may be associated with more impulsive behaviors.
+
+![Figure 5: R2 Scores of All Demographic Characteristics](https://github.com/violetyao/Exploring-COMPAS-Bias/blob/master/images/r2_all.png)
 
 We then take into consideration COMPAS scores. To do so, we condi- tion on COMPAS score and rerun the regression. For each of the ten possible scores, we fit the model on rows with that score only, so we obtain ten R2 scores (blue line), one for each COMPAS score. The average of the ten R2 scores is 0.408 (orange line), higher, but not much, than the unconditioned model’s 0.374. This implies that on average, COMPAS does not make de- mographic characteristics more powerful in explaining recidivism than they already are by too much.
 
@@ -62,8 +78,16 @@ We repeat the process for each of the three demographic characteristics independ
 
 To find out the reason behind the positive correlation between R2 scores and COMPAS scores, we become interested in the algorithm’s performance across its scores. To do so, we formulate COMPAS scores as probability to recidivate. A score of 1 represents 10% probability of recidivism, and a score of 10 dictates with certainty that the individual will recidivate in two years. Note that under our formulation, a score of 5 predicts with equal probability that the individual recidivates or not.
 
+Figure 6: R2 Scores for Different Groups
+
+![(a) Sex](https://github.com/violetyao/Exploring-COMPAS-Bias/blob/master/images/r2_sex.png)
+![(b) Age Category](https://github.com/violetyao/Exploring-COMPAS-Bias/blob/master/images/r2_age.png)
+![(c) Race](https://github.com/violetyao/Exploring-COMPAS-Bias/blob/master/images/r2_race.png)
+
 To measure the algorithm’s performance, we select Brier score as the measurement for model loss. A Brier score is defined as BS = 1 􏰀N (predi−N i=1obsi)2. In our case, there are two possible outcomes, recidivism and no re-
 cidivism. Brier scores here can be thus be simplified to BS = (recid − COMPAS)2. A score of 0 indicates perfect prediction, while a score of 1 is the worst possible. A score of 0.25 (Figure 7, red line) is the same as a coin flip. We calculate a Brier score for the algorithm on the entire Broward County dataset, and then we calculate an average Brier score for each COM- PAS score (blue line), aggregating all rows with that COMPAS score. Finally, we calculate an average score for the ten Brier scores (orange line).
+
+![Figure 7: Heteroskedasticity of COMPAS Scores](https://github.com/violetyao/Exploring-COMPAS-Bias/blob/master/images/residual.png)
 
 The 0.229 average score indicates that the algorithm does a better job predicting two-year recidivism than flipping a coin by a moderate margin. However, there is ample room for improvement. More importantly, we ob- serve heteroskedasticity in COMPAS scores in the Broward County dataset. In general, the algorithm’s predictivity gets worse as it gives a higher score. The 0.181 Brier score for COMPAS score of 1 indicates very good model predictivity for low risk individuals, while the algorithm’s prediction is worse than a coin flip when it yields a score of 7 (BS = 0.254) or 9 (BS = 0.251). This implies that the algorithm’s performance gets worse as the risk of re-cidivism gets higher, in general.
 
@@ -83,15 +107,22 @@ We select the category “Male” as the baseline. It has a false positive rate 
 
 We select the category “25 - 45” as the baseline. It has a false positive rate of 29%. “Greater than 45” has a 33% false positive rate and “Less than 25” reports 32% false positive rate. Both fall into the acceptable interval of 80% - 125% of that of the reference group. (Figure 10)
 
+![Figure 9: Average FPR Computed on Bootstrapped Samples for Sex](https://github.com/violetyao/Exploring-COMPAS-Bias/blob/master/images/fprs_sex.png)
+![Figure 10: Average FPR Computed on Bootstrapped Samples for Age](https://github.com/violetyao/Exploring-COMPAS-Bias/blob/master/images/fprs_age_cat.png)
+
 #### 6.3 Race
 
 We have to drop all groups other than ”Caucasian” and ”African American” because there are fewer than 100 observations for high-risk for any of the other groups in the dataset. We select the category “Caucasian” as the baseline. It has a false positive rate of 29%. “African American” has a false positive only slightly higher than that of “Caucasian”, which again falls within the acceptable interval. (Figure 11)
+
+![Figure 11: Average FPR Computed on Bootstrapped Sampling for Race](https://github.com/violetyao/Exploring-COMPAS-Bias/blob/master/images/fprs_race.png)
 
 ### 7 Ad Absurdum: An Example
 
 It seems clear now that blindly applying an audit tool may not result in sound conclusions about bias in models, as bias is likely to reside in an unbalanced dataset. Even though a dataset is not intentionally biased, as a convenience sample (e.g. Broward Country, Florida), it does not faithfully represent the population (e.g. United States). As a result, many assumptions we have for the population may not hold for the convenience sample.
 
 In the Broward County dataset, each individual’s birth date is recorded. We infer each individual’s zodiac sign (e.g. Ares) from their birth date and attempt to run Aequitas for that label. Although zodiac signs are believed by some people historically or for entertainment purposes to be associated with personality, it is well perceived as a pseudoscience. We assume that zodiac signs are independent from any and all characteristics of an individual, including their criminal propensity. However, Aequitas shows us a different story.
+
+![Figure 12: Aequitas Report According to Astrology](https://github.com/violetyao/Exploring-COMPAS-Bias/blob/master/images/zodiac_sign.png)
 
 Libra being reference, Aries, Taurus, and Aquarius fail the audit for false positive rate parity. Unless one actually believes in the ”ram-like” amity an Aries person possesses, this audit should mean nothing more than an unbalanced dataset and noises in applying algorithms. We would like to use the absurdity of this example to show the importance of a balanced dataset using automated tools to determine model bias. In addition, one may also see that a seemingly balanced dataset may be biased in some aspects. We must closely examine a dataset before imposing our usual assumptions.
 
